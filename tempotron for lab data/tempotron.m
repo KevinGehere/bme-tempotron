@@ -8,15 +8,16 @@ K = @(t1,t2) (V0*(exp(-(t1-t2)/tau) - exp(-(t1-t2)/taus)));
 Ns = size(train1{1}, 1);
 Ntrial = size(train2, 2);
 
-Niter = 20;
+Niter = 30;
 lamda = 0.1;
 w = 0.001 * rand(1, Ns);
 Vthr = 1;
+error = zeros(Niter, 1);
 
 tic
 for i = 1:Niter
-	iclass = randi(2,1,1);
-	itrial = randi(Ntrial, 1,1);
+	iclass = randi(2,1);
+	itrial = randi(Ntrial, 1);
 	stdata = eval(['train', num2str(iclass), '{1, ',num2str(itrial),'}']);
 	Vt = forward_pass(stdata, w);
 	[Vtmax, tmax] = max(Vt);
@@ -30,6 +31,7 @@ for i = 1:Niter
 			end
 		end
 		w = w + lamda * Ve;
+		error(i) = 1;
 	elseif iclass == 2 && Vtmax >= Vthr
 		Ve = zeros(1, Ns);
 		for j = 1:Ns
@@ -39,7 +41,11 @@ for i = 1:Niter
 			end
 		end
 		w = w - lamda * Ve;
+		error(i) = 1;
+	else
+		error(i) = -1;
 	end
 end
 toc
+
 end
