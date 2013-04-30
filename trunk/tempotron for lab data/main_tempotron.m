@@ -1,7 +1,4 @@
-function main_tempotron
-close all;
-clear;
-clc;
+function Vt = main_tempotron(comparison)
 
 % label = 'AP';
 label = 'OO';
@@ -55,18 +52,34 @@ for i = 1:Ntest
 	train3 = data(1, indtrain3);
 	test3 = data(1, indtest3);
 	
-	w = tempotron(train1, train2);
-% 	w = tempotron(train1, train3);
-% 	w = tempotron(train2, train3);
-	
-	Vt1 = forward_pass(test1{1,1}, w);
-	Vt2 = forward_pass(test2{1,1}, w);
-% 	Vt3 = forward_pass(test3{1,1}, w);
-	
-	if max(Vt1) >=1 && max(Vt2) < 1
-% 	if max(Vt1) >=1 && max(Vt3) < 1
-% 	if max(Vt2) >=1 && max(Vt3) < 1
-		result(i) = 1;
+	switch comparison
+		case 1
+			w = tempotron(train1, train2);
+			Vt1 = forward_pass(test1{1,1}, w);
+			Vt2 = forward_pass(test2{1,1}, w);
+			Vt = [Vt1; Vt2];
+			
+			if max(Vt1) >=1 && max(Vt2) < 1
+				result(i) = 1;
+			end
+		case 2
+			w = tempotron(train1, train3);
+			Vt1 = forward_pass(test1{1,1}, w);
+			Vt3 = forward_pass(test3{1,1}, w);
+			Vt = [Vt1; Vt3];
+			
+			if max(Vt1) >=1 && max(Vt3) < 1
+				result(i) = 1;
+			end
+		case 3
+			w = tempotron(train2, train3);
+			Vt2 = forward_pass(test2{1,1}, w);
+			Vt3 = forward_pass(test3{1,1}, w);
+			Vt = [Vt2; Vt3];
+			
+			if max(Vt2) >=1 && max(Vt3) < 1
+				result(i) = 1;
+			end
 	end
 end
 
@@ -76,9 +89,16 @@ disp(['Percentage of correct classification = ', num2str(100*sum(result)/length(
 
 figure; hold on;
 plot(1:twin, 1, 'k:');
-plot(1:twin, Vt1, 'b', 1:twin, Vt2, 'r');
-% plot(1:twin, Vt1, 'b', 1:twin, Vt3, 'g');
-% plot(1:twin, Vt2, 'r', 1:twin, Vt3, 'g');
+switch comparison
+	case 1
+		plot(1:twin, Vt1, 'b', 1:twin, Vt2, 'r');
+	case 2
+		plot(1:twin, Vt1, 'b', 1:twin, Vt3, 'g');
+	case 3
+		plot(1:twin, Vt2, 'r', 1:twin, Vt3, 'g');
+end
 
 end
+
+
 

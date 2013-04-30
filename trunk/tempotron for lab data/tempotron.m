@@ -8,7 +8,7 @@ K = @(t1,t2) (V0*(exp(-(t1-t2)/tau) - exp(-(t1-t2)/taus)));
 Ns = size(train1{1}, 1);
 Ntrial = size(train2, 2);
 
-Niter = 30;
+Niter = 60;
 lamda = 0.1;
 w = 0.001 * rand(1, Ns);
 Vthr = 1;
