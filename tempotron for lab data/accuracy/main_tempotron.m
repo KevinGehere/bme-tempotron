@@ -1,4 +1,4 @@
-function Vt = main_tempotron(comparison)
+function main_tempotron(comparison)
 
 % label = 'AP';
 label = 'OO';
@@ -15,22 +15,22 @@ elseif strcmp(label, 'OO')
 end
 
 Nneuron = size(dataset, 2);
-twin = 8000;
-duration = 8000;
+twin = 1000;
+duration = 1000;
 ntbin = duration/twin;
 data = cell(1,30);
 
 for j = 1:30
 	stdata = [];
 	for i = 1:Nneuron
-		if i == 20 && strcmp(label, 'AP'), continue, end;
+% 		if i == 20 && strcmp(label, 'AP'), continue, end;
 		sndata = reshape(dataset{i}(t0:t0-1+duration, j), twin, ntbin)';
 		stdata = [stdata; sndata];
 	end
 	data{1,j} = stdata;
 end
 
-Ntest = 1;
+Ntest = 10;
 testsize = 1;
 result = zeros(Ntest, 1);
 
@@ -57,8 +57,7 @@ for i = 1:Ntest
 			w = tempotron(train1, train2);
 			Vt1 = forward_pass(test1{1,1}, w);
 			Vt2 = forward_pass(test2{1,1}, w);
-			Vt = [Vt1; Vt2];
-			
+						
 			if max(Vt1) >=1 && max(Vt2) < 1
 				result(i) = 1;
 			end
@@ -66,8 +65,7 @@ for i = 1:Ntest
 			w = tempotron(train1, train3);
 			Vt1 = forward_pass(test1{1,1}, w);
 			Vt3 = forward_pass(test3{1,1}, w);
-			Vt = [Vt1; Vt3];
-			
+					
 			if max(Vt1) >=1 && max(Vt3) < 1
 				result(i) = 1;
 			end
@@ -75,8 +73,7 @@ for i = 1:Ntest
 			w = tempotron(train2, train3);
 			Vt2 = forward_pass(test2{1,1}, w);
 			Vt3 = forward_pass(test3{1,1}, w);
-			Vt = [Vt2; Vt3];
-			
+					
 			if max(Vt2) >=1 && max(Vt3) < 1
 				result(i) = 1;
 			end
@@ -86,17 +83,6 @@ end
 disp(['Number of trials used in training is ', num2str(10-testsize), ' for each odor']);
 disp(['Number of tests = ', num2str(Ntest)]);
 disp(['Percentage of correct classification = ', num2str(100*sum(result)/length(result)), '%']);
-
-figure; hold on;
-plot(1:twin, 1, 'k:');
-switch comparison
-	case 1
-		plot(1:twin, Vt1, 'b', 1:twin, Vt2, 'r');
-	case 2
-		plot(1:twin, Vt1, 'b', 1:twin, Vt3, 'g');
-	case 3
-		plot(1:twin, Vt2, 'r', 1:twin, Vt3, 'g');
-end
 
 end
 
