@@ -1,5 +1,5 @@
 function Vt = forward_pass(stdata, w)
-tau = 15;
+tau = 30;
 taus = tau/4;
 V0 = 2.12;
 %PSP kernel
