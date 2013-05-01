@@ -5,7 +5,7 @@ taus = tau/4;
 
 T = 500;    %ms
 
-Np = 10;    %number of patterns
+Np = 1;    %number of patterns
 Ns = 10;    %number of input synapses
 
 V0 = 2.12;
@@ -18,7 +18,11 @@ K = @(t,ti) (V0*(exp(-(t-ti)/tau) - exp(-(t-ti)/taus)));
 
 lambda = 0.1;
 
-while (pvmax < Vthr || nvmax > Vthr)
+[V, ptmax, pvmax, ntmax, nvmax] = feed_forward(pspikes, nspikes, W);
+pvmax
+nvmax
+
+while (pvmax < Vthr || nvmax >= Vthr)
 
 while (pvmax < Vthr)
     dW = zeros(1, Ns);
@@ -32,13 +36,13 @@ while (pvmax < Vthr)
 
     dW = dW * lambda;
     W = W + dW;
-    [V, ptmax, pvmax, ntmax, nvmax] = forward_pass(pinputs, ninputs, W);
+    [V, ptmax, pvmax, ntmax, nvmax] = feed_forward(pspikes, nspikes, W);
     pvmax
     nvmax
     
 end
 
-while (nvmax > Vthr)
+while (nvmax >= Vthr)
     dW = zeros(1, Ns);
     for ti = 1:(ntmax-1)
         for i = 1:Ns
@@ -50,7 +54,7 @@ while (nvmax > Vthr)
     
     dW = dW * lambda;
     W = W - dW;
-    [V, ptmax, pvmax, ntmax, nvmax] = forward_pass(pinputs, ninputs, W);
+    [V, ptmax, pvmax, ntmax, nvmax] = feed_forward(pspikes, nspikes, W);
     pvmax
     nvmax
 end

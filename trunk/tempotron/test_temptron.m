@@ -1,24 +1,17 @@
 
-tshunt = 0;
+VX = zeros(10,10);
+TX = zeros(10,10);
 
-V = zeros(2, Np*T);
-for t = 1:Np*T
-    sumi = zeros(1, Ns);
-    
-    if tshunt == 0
-        tend = t;
-    else
-        tend = tshunt;
-    end
-    for ti = 1:tend
-        for i = 1:Ns
-            if inputs(i,ti) == 1
-                sumi(i) = sumi(i) + K(t, ti);
-            end
+for ii = 1:1
+    for jj = 2:2    
+        for kk = 1:10
+        
+        %pidx = jj;
+        %nidx = [1:pidx-1 pidx+1:10];
+
+        inspikes = images(:,inds(ii,jj));
+
+        [~, TX(kk,ii), VX(kk,ii)] = feed_forward(inspikes, W(kk,:), T);
         end
-    end
-    V(t) = W*sumi';
-    if V(t) > 1
-        tshunt = t;
     end
 end
