@@ -12,7 +12,6 @@ Niter = 10;
 lamda = 0.1;
 w = 0.001 * rand(1, Ns);
 Vthr = 1;
-error = zeros(Niter, 1);
 
 tic
 for i = 1:Niter
