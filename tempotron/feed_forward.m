@@ -22,13 +22,13 @@ vmax = -9999;
 for t = 1:Np*T
     sums = zeros(1, Ns);
     for i = 1:Ns
-        sums(i) = sums(i) + K(t, inspikes(i,1));
+        sums(i) = K(t, inspikes(i,1));
     end
 
-    V(1,t) = (W * sums');
+    V(t) = (W * sums');
 
-    if V(1,t) > vmax
-        vmax = V(1,t);
+    if V(t) > vmax
+        vmax = V(t);
         tmax = t;
     end
 end

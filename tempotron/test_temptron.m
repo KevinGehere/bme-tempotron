@@ -2,12 +2,9 @@
 VX = zeros(10,10);
 TX = zeros(10,10);
 
-for ii = 1:1
-    for jj = 2:2    
-        for kk = 1:10
-        
-        %pidx = jj;
-        %nidx = [1:pidx-1 pidx+1:10];
+for ii = 1:5
+    for jj = 3:3    
+        for kk = jj:jj;
 
         inspikes = images(:,inds(ii,jj));
 
